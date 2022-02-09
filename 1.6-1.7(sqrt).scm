@@ -2,6 +2,7 @@
 (define (average x y) (/ (+ x y) 2))
 
 (define (good-enough-square? guess x)
+  (format #t "~a - old guess, ~a - new guess\n" guess (improve-square guess x))
   (= (improve-square guess x) guess))
 
 (define (sqrt x) 

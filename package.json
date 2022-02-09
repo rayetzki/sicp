@@ -2,7 +2,6 @@
   "name": "sicp-solutions",
   "version": "1.0.0",
   "description": "Solutions to SICP challenges, while reading Structure and Interpretation",
-  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
