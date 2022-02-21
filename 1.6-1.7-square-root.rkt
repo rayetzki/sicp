@@ -14,6 +14,5 @@
       guess
       (sqrt-iter (improve-square guess))))
     
-  (sqrt-iter 1.0)
-)
+  (sqrt-iter 1.0))
 
