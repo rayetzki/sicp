@@ -1,5 +1,5 @@
 (defn inc-first [a b]
-  (if (= a 0) b (inc (inc-first (dec a) b))))
+  (if (zero? a) b (inc (inc-first (dec a) b))))
 
 ;; (inc-first 4 5)
 ;; (inc (inc-first 3 5))
@@ -12,7 +12,7 @@
 ;; 9 <-- recursive
 
 (defn inc-second [a b]
-  (if (= a 0) b (inc-second (dec a) (inc b))))
+  (if (zero? a) b (inc-second (dec a) (inc b))))
 ;; (inc-second 4 5)
 ;; (inc-second 3 6)
 ;; (inc-second 2 7)

@@ -6,8 +6,8 @@
         (= kinds-of-coins 5) 50))
 
 (defn cc [amount kinds-of-coins]
-  (cond (= amount 0) 1
-        (or (< amount 0) (= kinds-of-coins 0)) 0
+  (cond (zero? amount) 1
+        (or (< amount 0) (zero? kinds-of-coins)) 0
         :else (+
                 (cc amount (dec kinds-of-coins))
                 (cc (- amount (first-denomination kinds-of-coins)) kinds-of-coins))))

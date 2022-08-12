@@ -1,8 +1,8 @@
 (defn Akkerman [x y]
-  (cond (= y 0) 0
-        (= x 0) (* 2 y)
+  (cond (zero? y) 0
+        (zero? x) (* 2 y)
         (= y 1) 2
-        :else (Akkerman (- x 1) (Akkerman x (- y 1)))))
+        :else (Akkerman (dec x) (Akkerman x (dec y)))))
 
 ;; A(1 10)
 ;; A(0 A(1 9))
