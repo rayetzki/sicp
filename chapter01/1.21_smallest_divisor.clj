@@ -1,4 +1,5 @@
-(import 'lib.math)
+(ns chapter01.1.21_smallest_divisor
+  (:require [lib.math :as math]))
 
 (defn find-divisor [n test-divisor]
   (cond (> (math/square test-divisor) n) n
@@ -8,9 +9,9 @@
 (defn smallest-divisor [n]
   (find-divisor n 2))
 
-(defn is-prime? [n] 
+(defn prime? [n]
   (= (smallest-divisor n) n))
 
 ;; (smallest-divisor 199) <-- 199 - is prime
 ;; (smallest-divisor 1999) <-- 1999 - is prime
-;; (smallest-divisor 19999) <-- 7 - not prime(
+;; (smallest-divisor 19999) <-- 7 - not prime

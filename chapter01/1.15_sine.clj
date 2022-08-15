@@ -1,4 +1,4 @@
-(import 'lib.math)
+(require '[lib.math :as math])
 
 (defn p [x] (- (* 3 x) (* 4 (math/cube x))))
 (defn sine [angle]

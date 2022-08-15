@@ -1,4 +1,4 @@
-(import 'lib.math)
+(require '[lib.math :as math])
 
 (defn good-enough? [guess x] (< (abs (- (math/square guess) x)) 0.00000000001))
 (defn improve [guess x] (math/average guess (/ x guess)))
