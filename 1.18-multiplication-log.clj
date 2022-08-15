@@ -1,6 +1,5 @@
 (defn multiply [a b] (if (zero? b) 0 (+ a (multiply a (dec b)))))
 (defn dbl [n] (multiply n 2))
-(defn square [n] (multiply n n))
 (defn halve [n] (when (even? n) (/ n 2)))
 
 (defn fast-mult-logn [a b]

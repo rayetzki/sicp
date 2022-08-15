@@ -1,7 +1,6 @@
-(defn average [x y] (/ (+ x y) 2))
-(defn square [x] (* x x))
-(defn good-enough? [guess x] (< (abs (- (square guess) x)) 0.00000000001))
-(defn improve [guess x] (average guess (/ x guess)))
+(import 'lib.math)
+(defn good-enough? [guess x] (< (abs (- (math/square guess) x)) 0.00000000001))
+(defn improve [guess x] (math/average guess (/ x guess)))
 
 (defn sqrt-iter [guess x]
   (if (good-enough? guess x)
