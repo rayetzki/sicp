@@ -1,3 +1,6 @@
+(ns chapter01.1.16_exp_iterative
+  (:require [lib.math :refer [square, halve]]))
+
 (defn expt-recur [b n]
   (if (zero? n) 
     1
@@ -10,17 +13,17 @@
               (expt-counter x (dec counter) (* product x))))]
      (expt-counter a n 1)))
 
-(defn square [x] (* x x))
-(defn fast-expt [a n]
-  (cond (zero? n) 1
-        (even? n) (square (fast-expt a (/ n 2)))
-        :else (* a (fast-expt a (dec n)))))
+(defn fast-expt [base exp]
+  (cond
+    (zero? exp) 1
+    (even? exp) (square (fast-expt base (halve exp)))
+    :else (* base (fast-expt base (dec exp)))))
 
 (defn expt-log [a n]
    (letfn [(expt-log-counter [a b n]
            (cond 
               (zero? n) a
-              (even? n) (recur a (square b) (/ n 2))
+              (even? n) (recur a (square b) (halve n))
               (odd? n) (recur (* a b) b (dec n))))]
     (expt-log-counter 1 a n)))
 
