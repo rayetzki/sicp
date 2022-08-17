@@ -1,4 +1,5 @@
-(require '[lib.fermat :refer [expmod]])
+(ns chapter01.1.28_miller_rabin_test
+  (:require [lib.fermat :refer [expmod]]))
 
 (defn miller-rabin-test [base exp]
   (cond 

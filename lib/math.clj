@@ -5,3 +5,7 @@
 (defn cube [x] (* x x x))
 (defn halve [x] (/ x 2))
 (defn divides? [a b] (zero? (rem b a)))
+(defn gcd [a b]
+  (if (zero? b)
+    a
+    (gcd b (rem a b))))
