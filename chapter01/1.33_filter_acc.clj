@@ -12,4 +12,4 @@
   (filtered-accumulate + 0 miller-rabin-prime? square a inc b))
 
 (defn product-prime [n]
-  (filtered-accumulate * 1.0 #(= (gcd % n) 1) (fn [x] x) 1 inc (dec n)))
+  (filtered-accumulate * 1.0 #(= (gcd % n) 1) identity 1 inc (dec n)))

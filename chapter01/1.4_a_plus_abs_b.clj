@@ -1,4 +1,4 @@
 (defn a-plus-abs-b [a b]
-  ((if (> b 0) + -) a b))
+  ((if (pos? b) + -) a b))
 
 (a-plus-abs-b 2 -2)

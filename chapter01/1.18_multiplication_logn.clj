@@ -4,10 +4,10 @@
 
 (defn fast-mult-logn [a b]
   (letfn [(help [a b res]
-          (cond
-            (zero? b) res
-            (even? b) (recur (dbl a) (halve b) res)
-            (odd? b) (recur a (dec b) (+ res a))))]
+            (cond
+              (zero? b) res
+              (even? b) (recur (dbl a) (halve b) res)
+              (odd? b) (recur a (dec b) (+ res a))))]
     (help a b 0)))
 
 (time (multiply 100 20000))
