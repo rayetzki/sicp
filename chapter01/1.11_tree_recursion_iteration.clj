@@ -6,13 +6,11 @@
     n
     (+ (f-rec (- n 1)) (* 2 (f-rec (- n 2))) (* 3 (f-rec (- n 3))))))
 
-(defn iter-f [a b c count]
-  (if (zero? count)
-    a
-    (iter-f b c (+ c (* 2 b) (* 3 a)) (dec count))))
-
 (defn f-iter [n]
-  (iter-f 0 1 2 n))
+  (loop [a 0 b 1 c 2 count n]
+    (if (zero? count)
+      a
+      (recur b c (+ c (* 2 b) (* 3 a)) (dec count)))))
 
 ;; (f-iter 5)
 ;; (iter-f 0 1 2 5)

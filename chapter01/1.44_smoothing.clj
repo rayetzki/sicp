@@ -3,7 +3,7 @@
 
 (defn smooth [f]
   (let [dx 0.0001]
-    (fn [x] 
+    (fn [x]
       (/ (+ (f (- x dx)) (f x) (f (+ x dx))) 3))))
 
 (defn smooth-repeated [f times]

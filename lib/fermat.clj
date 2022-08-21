@@ -14,5 +14,5 @@
 
 (defn fast-prime? [n times exp-calc]
   (cond (zero? times) true
-        (fermat-test n exp-calc) (recur n (dec times) exp-calc)
+        (fermat-test n exp-calc) (fast-prime? n (dec times) exp-calc)
         :else false))

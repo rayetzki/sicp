@@ -6,8 +6,8 @@
     (+ (term a) (sum-linear-rec term (next a) next b))))
 
 (defn sum-iter [term a next b]
-  (letfn [(iter [a result] 
-                (if (> a b)
-                  result
-                  (iter (next a) (+ result (term a)))))]
-    (iter a 0)))
+  (loop [a a result 0]
+     (if (> a b) 
+       result 
+       (recur (next a) (+ result (term a))))))
+  

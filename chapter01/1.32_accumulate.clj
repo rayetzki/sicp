@@ -4,11 +4,10 @@
   (combiner (term a) (accumulate-rec combiner null-value term (next a) next b)))
 
 (defn accumulate-iter [combiner null-value term a next b]
-  (letfn [(iter [a result]
-                (if (> a b)
-                  result
-                  (iter (next a) (combiner result (term a)))))]
-    (iter a null-value)))
+  (loop [a a result null-value]
+    (if (> a b)
+      result
+      (recur (next a) (combiner result (term a))))))
 
 (defn product-r [term a next b] 
   (accumulate-rec * 1.0 term a next b))

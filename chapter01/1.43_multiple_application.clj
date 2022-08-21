@@ -3,8 +3,7 @@
 
 (defn repeated [f n]
   (fn [x]
-    (letfn [(loop [res times]
-              (if (zero? times)
-                res
-                (loop ((compose f f) x) (dec (dec times)))))]
-      (loop 0 n))))
+    (loop [res 0 times n]
+      (if (zero? times)
+        res
+        (recur ((compose f f) x) (dec (dec times)))))))
