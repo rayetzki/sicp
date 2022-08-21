@@ -9,3 +9,7 @@
   (if (zero? b)
     a
     (gcd b (rem a b))))
+
+(defn deriv [g]
+  (let [dx 0.00001]
+    (fn [x] (/ (- (g (+ x dx)) (g x)) dx))))
