@@ -3,7 +3,7 @@
 
 (defn make-rat 
   ([n] (make-rat n 1))
-  ([n d] 
+  ([n d]
    (let [g (gcd n d)
          n (/ n g)
          d (/ d g)]
