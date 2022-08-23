@@ -2,7 +2,7 @@
 
 (defn p [x] (- (* 3 x) (* 4 (math/cube x))))
 (defn sine [angle]
-  (if (not (> (abs angle) 0.1))
+  (if-not (> (abs angle) 0.1)
     angle
     (p (recur (/ angle 3.0)))))
 

@@ -1,6 +1,7 @@
+(require '[lib.math :refer [halve]])
+
 (defn multiply [a b] (if (zero? b) 0 (+ a (multiply a (dec b)))))
 (defn dbl [n] (multiply n 2))
-(defn halve [n] (when (even? n) (/ n 2)))
 
 (defn fast-mult-rec [a b]
   (cond

@@ -15,13 +15,13 @@
 (defn fast-expt [base exp]
   (cond (zero? exp) 1 
         (even? exp) (square (fast-expt base (halve exp))) 
-        (odd? exp) (* base (fast-expt base (dec exp)))))
+        :else (* base (fast-expt base (dec exp)))))
 
 (defn expt-log [a n]
   (loop [res 1 b a n n]
     (cond (zero? n) res
           (even? n) (recur res (square b) (halve n))
-          (odd? n) (recur (* res b) n (dec n)))))
+          :else (recur (* res b) n (dec n)))))
 
 (time (expt-recur 2 100))
 (time (expt-iter 2 5))
