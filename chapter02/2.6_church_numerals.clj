@@ -14,5 +14,3 @@
       ((a f) ((b f) x)))))
 
 (((add two one) dec) 0)
-
-(take-last (range 1 20))
