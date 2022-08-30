@@ -1,4 +1,6 @@
-(require '[quil.core :as q :include-macros true])
+(ns escher.core
+  (require [quil.core :as q])
+  (:gen-class))
 
 (def width 1000)
 (def height 1000)
@@ -19,15 +21,15 @@
 
 (defn add-vec [[x1 y1] [x2 y2]]
   ;; COMPLETE (Ex 2.46)
- )
+ (vector (+ x1 x2) (+ y1 y2)))
 
 (defn sub-vec [[x1 y1] [x2 y2]]
   ;; COMPLETE
-  )
+  (vector (- x2 x1) (- y2 y1)))
 
 (defn scale-vec [[x y] s]
   ;; COMPLETE
-  )
+  (vector (* s x) (* s y)))
 
 (defn frame-coord-map
   [{:keys [origin e1 e2]}]
@@ -90,7 +92,6 @@
   ; COMPLETE
   )
 
-
 (defn quartet [p1 p2 p3 p4]
   (above (beside p1 p2)
          (beside p3 p4)))
@@ -109,18 +110,26 @@
     (let [smaller (right-split p (dec n))]
       (beside p (above smaller smaller)))))
 
+;; (Ex 2.44)
 (defn up-split [p n]
-  ;; COMPLETE (Ex 2.44)
-  )
+  (if (= n 0) 
+    p
+    (let [smaller (up-split p (dec n))]
+      (above p (beside smaller smaller)))))
 
-
-(defn split [f g]
-  ; COMPLETE (Ex 2.45)
-  "Should be able to do
+;; (Ex 2.45)
+ "Should be able to do
     (def right-split (split beside above))
     (def up-split (split above beside)
   and replace the existing *-split fns"
-  )
+(defn split [f g] 
+  (fn [p n]
+    (letfn [(help [painter times]
+              (if (zero? n)
+                p
+                (let [smaller (help painter (dec times))]
+                  (f painter (g smaller smaller)))))]
+      (help p n))))
 
 (defn corner-split [p n]
   (if (= n 0)
@@ -142,10 +151,37 @@
   (combine-four (corner-split p n)))
 
 ; Ex2.49, Make these shapes with segment-painter/path
-(def box )
-(def x)
-(def diamond)
-(def george)
+(def box (segment-painter
+          [[[0 0] [0 1]]
+           [[0 1] [1 1]]
+           [[1 1] [1 0]]
+           [[1 0] [0 0]]]))
+(def x (segment-painter
+        [[[0 0] [1 1]]
+         [[0 1] [1 0]]]))
+(def diamond (segment-painter
+              [[[0 0.5] [0.5 1]]
+               [[0.5 1] [1 0.5]]
+               [[1 0.5] [0.5 0]]
+               [[0.5 0] [0 0.5]]]))
+(def george (segment-painter
+             [[[0 0.15] [0.2 0.4]]
+              [[0.2 0.4] [0.3 0.35]]
+              [[0.3 0.35] [0.4 0.35]]
+              [[0.35 0.35] [0.3 0.15]]
+              [[0.3 0.15] [0.4 0]]
+              [[0.6 0] [0.67 0.2]]
+              [[0.67 0.2] [0.65 0.35]]
+              [[0.65 0.35] [0.7 0.35]]
+              [[0.7 0.35] [1 0.6]]
+              [[1 0.8] [0.65 0.5]]
+              [[0.65 0.5] [0.75 1]]
+              [[0.6 1] [0.5 0.7]]
+              [[0.5 0.7] [0.4 1]]
+              [[0.25 1] [0.33 0.4]]
+              [[0.33 0.4] [0.25 0.5]]
+              [[0.25 0.5] [0.2 0.5]]
+              [[0.2 0.5] [0 0.3]]]))
 
 (defn draw [picture]
   (picture whole-window))
@@ -166,11 +202,12 @@
   (let [man (image-painter (q/load-image "data/man.gif"))
         bruce (image-painter (q/load-image "data/bruce.jpg"))
         angels (image-painter (q/load-image "data/angels.jpg"))]
-    (q/background 255)
+    (q/background 255) 
     ;; (frame-painter frame1)
-    ;; (draw x)
+    ;; (draw x)   
     ;; (draw box)
-    ;; (george frame2)
+    ;; (draw diamond) 
+    (george frame2)
     ;; (draw (rotate george))
     ;; (draw (flip-horiz george))
     ;; (draw (beside box box))
@@ -194,7 +231,7 @@
     ;;                              george)))
     ))
 
-(q/defsketch 'escher
+(q/defsketch escher
   :title "Escher"
   :draw draw-image
   :size [width height])
