@@ -16,6 +16,3 @@
 ;; (loop (conj (3 2 1) ()))
 ;; (3 2 1)
 (reverse-left (list 1 2 3))
-
-(concat [3] [2] [1] [])
-(concat [3])

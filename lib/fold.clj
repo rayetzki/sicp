@@ -16,3 +16,6 @@
     (cons
      (fold-right op init (map first seqs))
      (acc-n op init (map rest seqs)))))
+
+(defn flatmap [proc collection]
+  (fold-right conj (empty collection) (map proc collection)))

@@ -16,3 +16,6 @@
   (cond (zero? times) true
         (fermat-test n exp-calc) (fast-prime? n (dec times) exp-calc)
         :else false))
+
+(defn prime? [n]
+  (fast-prime? n 10 expmod))
