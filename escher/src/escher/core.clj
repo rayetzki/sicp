@@ -185,12 +185,9 @@
         [e1x e1y] :e1
         [e2x e2y] :e2}]
     (let [width (.width img)
-          height (.height img)
-          coords-map (frame-coord-map {[ox oy] :origin
-                                       [e1x e1y] :e1
-                                       [e2x e2y] :e2})]
+          height (.height img)])
       ; COMPLETE
-     )))
+     (q/image img 0 0 width height)))
 
 (def diag (segment-painter [[[0 0] [1 1]]]))
 
@@ -223,8 +220,8 @@
     ;; (bruce frame1) 
     ;; (bruce frame2) 
     ;; (draw (beside george bruce))
-    ;; (draw (corner-split bruce 4))
-     (draw (square-limit bruce 3)) 
+    ;; (draw (corner-split bruce 4))  
+    ;; (draw (square-limit bruce 3)) 
     ;; (draw (beside  bruce (below  bruce
     ;;                             george)))
     ))
