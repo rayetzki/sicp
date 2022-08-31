@@ -1,9 +1,8 @@
 (ns escher.core
-  (require [quil.core :as q])
-  (:gen-class))
+  (require [quil.core :as q]))
 
-(def width 1000)
-(def height 1000)
+(def width 1200)
+(def height 1200)
 
 (def draw-line q/line)
 
@@ -21,15 +20,15 @@
 
 (defn add-vec [[x1 y1] [x2 y2]]
   ;; COMPLETE (Ex 2.46)
- (vector (+ x1 x2) (+ y1 y2)))
+  [(+ x1 x2) (+ y1 y2)])
 
 (defn sub-vec [[x1 y1] [x2 y2]]
   ;; COMPLETE
-  (vector (- x2 x1) (- y2 y1)))
+  [(- x1 x2) (- y1 y2)])
 
 (defn scale-vec [[x y] s]
   ;; COMPLETE
-  (vector (* s x) (* s y)))
+  [(* x s) (* y s)])
 
 (defn frame-coord-map
   [{:keys [origin e1 e2]}]
@@ -53,22 +52,22 @@
 
 (defn transform-picture [p origin e1 e2]
   (fn [frame]
-    (let [map (frame-coord-map frame)
-          new-origin (map origin)]
+    (let [new-coords (frame-coord-map frame)
+          new-origin (new-coords origin)]
       (p {:origin new-origin
-          :e1 (sub-vec (map e1) new-origin)
-          :e2 (sub-vec (map e2) new-origin)}))))
+          :e1 (sub-vec (new-coords e1) new-origin)
+          :e2 (sub-vec (new-coords e2) new-origin)}))))
 
 (defn flip-vert [p]
   (transform-picture p [0 1] [1 1] [0 0]))
 
 (defn flip-horiz [p]
   ;; COMPLETE (Ex 2.50)
-  )
+  (transform-picture p [1 0] [0 0] [1 1]))
 
 (defn rotate [p]
   ;; COMPLETE
-  )
+  (transform-picture p [1 0] [1 1] [0 0]))
 
 (defn rotate180 [p]
   (rotate (rotate p)))
@@ -84,104 +83,99 @@
       (left frame)
       (right frame))))
 
-(defn above [p1 p2]
+(defn below [p1 p2]
   ; COMPLETE (Ex 2.51)
-  )
+  (let [split [0 0.5]
+        bottom (transform-picture p1 [0 0] [1 0] split)
+        top (transform-picture p2 split [1 0.5] [0 1])]
+    (fn [frame]
+      (bottom frame)
+      (top frame))))
 
-(defn path [& veclist]
-  ; COMPLETE
-  )
+(defn path [& [veclist]]
+  (loop [result [] paths veclist]
+    (if (empty? (rest paths))
+      (conj result (first veclist))
+      (let [new-path (vector (first paths) (second paths))]
+        (recur (conj result new-path) (rest paths))))))
 
 (defn quartet [p1 p2 p3 p4]
-  (above (beside p1 p2)
+  (below (beside p1 p2)
          (beside p3 p4)))
 
-(defn square-of-four [tl tr
-                      bl br]
-  (fn [p]
-    (let [top (beside (tl p) (tr p))
-          bottom (beside (bl p) (br p))]
-      (above top
-             bottom))))
+(defn square-of-four [tl tr bl br]
+  (fn [picture]
+    (let [top (beside (tl picture) (tr picture))
+          bottom (beside (bl picture) (br picture))]
+      (below top bottom))))
 
 (defn right-split [p n]
-  (if (= n 0)
+  (if (zero? n)
     p
     (let [smaller (right-split p (dec n))]
-      (beside p (above smaller smaller)))))
+      (beside p (below smaller smaller)))))
 
 ;; (Ex 2.44)
-(defn up-split [p n]
-  (if (= n 0) 
-    p
-    (let [smaller (up-split p (dec n))]
-      (above p (beside smaller smaller)))))
+(defn up-split [picture fraction]
+  (if (zero? fraction)
+    picture
+    (let [smaller (up-split picture (dec fraction))]
+      (below picture (beside smaller smaller)))))
 
 ;; (Ex 2.45)
- "Should be able to do
-    (def right-split (split beside above))
-    (def up-split (split above beside)
+"Should be able to do
+    (def right-split (split beside below))
+    (def up-split (split below beside)
   and replace the existing *-split fns"
-(defn split [f g] 
-  (fn [p n]
+(defn split [f g]
+  (fn [picture fraction]
     (letfn [(help [painter times]
-              (if (zero? n)
-                p
+              (if (zero? fraction)
+                picture
                 (let [smaller (help painter (dec times))]
                   (f painter (g smaller smaller)))))]
-      (help p n))))
+      (help picture fraction))))
 
-(defn corner-split [p n]
-  (if (= n 0)
-    p
-    (let [up (up-split p (dec n))
-          right (right-split p (dec n))
+(defn corner-split [picture n]
+  (if (zero? n)
+    picture
+    (let [up (up-split picture (dec n))
+          right (right-split picture (dec n))
           top-left (beside up up)
-          bottom-right (above right right)
-          top-right (corner-split p (dec n))]
-      (beside (above top-left p)
-              (above top-right bottom-right)))))
+          bottom-right (below right right)
+          top-right (corner-split picture (dec n))]
+      (beside (below top-left picture)
+              (below top-right bottom-right)))))
 
 (def combine-four (square-of-four flip-horiz
                                   identity
                                   rotate180
                                   flip-vert))
 
-(defn square-limit [p n]
-  (combine-four (corner-split p n)))
+(defn square-limit [picture fraction]
+  (combine-four (corner-split picture fraction)))
 
 ; Ex2.49, Make these shapes with segment-painter/path
-(def box (segment-painter
-          [[[0 0] [0 1]]
-           [[0 1] [1 1]]
-           [[1 1] [1 0]]
-           [[1 0] [0 0]]]))
-(def x (segment-painter
-        [[[0 0] [1 1]]
-         [[0 1] [1 0]]]))
-(def diamond (segment-painter
-              [[[0 0.5] [0.5 1]]
-               [[0.5 1] [1 0.5]]
-               [[1 0.5] [0.5 0]]
-               [[0.5 0] [0 0.5]]]))
-(def george (segment-painter
-             [[[0 0.15] [0.2 0.4]]
-              [[0.2 0.4] [0.3 0.35]]
-              [[0.3 0.35] [0.4 0.35]]
-              [[0.35 0.35] [0.3 0.15]]
-              [[0.3 0.15] [0.4 0]]
-              [[0.6 0] [0.67 0.2]]
-              [[0.67 0.2] [0.65 0.35]]
-              [[0.65 0.35] [0.7 0.35]]
-              [[0.7 0.35] [1 0.6]]
-              [[1 0.8] [0.65 0.5]]
-              [[0.65 0.5] [0.75 1]]
-              [[0.6 1] [0.5 0.7]]
-              [[0.5 0.7] [0.4 1]]
-              [[0.25 1] [0.33 0.4]]
-              [[0.33 0.4] [0.25 0.5]]
-              [[0.25 0.5] [0.2 0.5]]
-              [[0.2 0.5] [0 0.3]]]))
+(def box (segment-painter (path [[0 0] [0 1] [1 1] [1 0]])))
+(def x (segment-painter [[[0 0] [1 1]] [[0 1] [1 0]]]))
+(def diamond (segment-painter (path [[0 0.5] [0.5 1] [1 0.5] [0.5 0]])))
+(def george (segment-painter [[[0 0.15] [0.2 0.4]]
+                              [[0.2 0.4] [0.3 0.35]]
+                              [[0.3 0.35] [0.4 0.35]]
+                              [[0.35 0.35] [0.3 0.15]]
+                              [[0.3 0.15] [0.4 0]]
+                              [[0.6 0] [0.67 0.2]]
+                              [[0.67 0.2] [0.65 0.35]]
+                              [[0.65 0.35] [0.7 0.35]]
+                              [[0.7 0.35] [1 0.6]]
+                              [[1 0.8] [0.65 0.5]]
+                              [[0.65 0.5] [0.75 1]]
+                              [[0.6 1] [0.5 0.7]]
+                              [[0.5 0.7] [0.4 1]]
+                              [[0.25 1] [0.33 0.4]]
+                              [[0.33 0.4] [0.25 0.5]]
+                              [[0.25 0.5] [0.2 0.5]]
+                              [[0.2 0.5] [0 0.3]]]))
 
 (defn draw [picture]
   (picture whole-window))
@@ -189,12 +183,14 @@
 (defn image-painter [img]
   (fn [{[ox oy] :origin
         [e1x e1y] :e1
-        [e2x e2y] :e2
-        }]
+        [e2x e2y] :e2}]
     (let [width (.width img)
-          height (.height img)]
+          height (.height img)
+          coords-map (frame-coord-map {[ox oy] :origin
+                                       [e1x e1y] :e1
+                                       [e2x e2y] :e2})]
       ; COMPLETE
-      )))
+     )))
 
 (def diag (segment-painter [[[0 0] [1 1]]]))
 
@@ -202,33 +198,35 @@
   (let [man (image-painter (q/load-image "data/man.gif"))
         bruce (image-painter (q/load-image "data/bruce.jpg"))
         angels (image-painter (q/load-image "data/angels.jpg"))]
-    (q/background 255) 
-    ;; (frame-painter frame1)
+    (q/stroke-weight 4)
+    (q/background 255)
+    ;; (frame-painter frame1) 
     ;; (draw x)   
     ;; (draw box)
-    ;; (draw diamond) 
-    (george frame2)
-    ;; (draw (rotate george))
-    ;; (draw (flip-horiz george))
-    ;; (draw (beside box box))
+    ;; (draw diamond)  
+    ;; (george whole-window)  
+    ;; (draw george) 
+    ;; (draw (flip-vert george)) 
+    ;; (draw (flip-vert george)) 
+    ;; (draw (beside box box)) 
     ;; (draw (combine-four george))
-    ;; (draw (beside (above george george)
-    ;;               (flip-horiz (above george george))))
-    ;; (draw (above (beside george (flip-horiz george))
+    ;; (draw (beside (below george george)
+    ;;               (flip-horiz (below george george))))
+    ;; (draw (below (beside george (flip-horiz george))
     ;;              (beside george (flip-horiz george))))
 
-    ;; (draw ((square-of-four identity flip-vert
+    ; (draw ((square-of-four identity flip-vert
     ;;                        flip-horiz rotate)
     ;;        george))
 
-    ; Needs image-painter
-    ;; (bruce frame1)
-    ;; (bruce frame2)
+    ; Needs image-painter  
+    ;; (bruce frame1) 
+    ;; (bruce frame2) 
     ;; (draw (beside george bruce))
     ;; (draw (corner-split bruce 4))
-    ;; (draw (square-limit bruce 3))
-    ;; (draw (beside  bruce (above  bruce
-    ;;                              george)))
+     (draw (square-limit bruce 3)) 
+    ;; (draw (beside  bruce (below  bruce
+    ;;                             george)))
     ))
 
 (q/defsketch escher
