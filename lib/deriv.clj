@@ -68,5 +68,3 @@
       (product? exp) (derive-product)
       (exponentiation? exp) (derive-exponent)
       :else (throw (IllegalArgumentException. "Unknown type of expression -- DERIV" exp)))))
-
-(deriv '(* x y (+ x 3)) 'x)
