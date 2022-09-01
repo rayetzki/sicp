@@ -5,7 +5,6 @@
     (= el (first S)) true
     :else (element-of-set? el (rest S))))
 
-
 ;; O(1) instead of at max O(n) since no containment check done
 (defn adjoin-set [el S] (cons el S))
 

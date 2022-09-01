@@ -1,3 +1,5 @@
+(ns chapter02.2.62_union_set_ordered)
+
 (defn union-set [set1 set2]
   (cond (and (empty? set1) (empty? set2)) (empty list)
         (and (empty? set1) (not-empty set2)) set2
