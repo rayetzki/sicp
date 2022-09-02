@@ -3,7 +3,6 @@
 (defn element-of-set? [el items]
   (cond (empty? items) false
         (= el (first items)) true
-        (< el (first items)) false
         :else (element-of-set? el (rest items))))
 
 (defn intersection-set [set1 set2]
@@ -14,8 +13,6 @@
               (< x2 x1) (intersection-set set1 (rest set2))))))
 
 (defn adjoin-set [el items]
-  (cond (or (element-of-set? el items) (neg-int? el)) items
-        (or (zero? el) (empty? items)) (cons el items)
-        (> el (last items)) (concat items (list el)) 
-        (< el (first items)) (concat (list el) items)
-        :else (cons (first items) (adjoin-set el (rest items)))))
+  (let [[prefix suffix] (split-with #(< % el) items)]
+    (if (= el (first suffix)) set
+        (concat prefix (list el) suffix))))

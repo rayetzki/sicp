@@ -1,3 +1,5 @@
+(ns chapter02.2.66_lookup)
+
 (defn lookup [given-key set-of-records]
   (cond (empty? set-of-records) false
         (= given-key (first (keys (first set-of-records)))) true
