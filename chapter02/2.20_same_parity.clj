@@ -1,7 +1,7 @@
 (defn same-parity [& nums]
-  (filter 
-   (fn [a] 
-     (if (true? (even? (first nums))) 
+  (filter
+   (fn [a]
+     (if (true? (even? (first nums)))
        (even? a)
        (odd? a)))
    nums))
