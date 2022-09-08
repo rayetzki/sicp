@@ -1,4 +1,5 @@
-(require '[chapter02.2.2_segment :refer [segment-length, make-segment, make-point]])
+(ns chapter02.2.3_rectangle
+  (:require [chapter02.2.2_segment :refer [segment-length, make-segment, make-point]]))
 
 (defn is-rectangle? [A B C D] 
   (= 

@@ -1,4 +1,4 @@
-(require :refer-clojure :exclude [get])
+(:refer-clojure :exclude [get])
 
 (defonce generic-table (atom (list)))
 
