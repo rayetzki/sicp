@@ -9,8 +9,8 @@
   (cond (zero? amount) 1
         (or (neg-int? amount) (zero? kinds-of-coins)) 0
         :else (+
-                (cc amount (dec kinds-of-coins))
-                (cc (- amount (first-denomination kinds-of-coins)) kinds-of-coins))))
+               (cc amount (dec kinds-of-coins))
+               (cc (- amount (first-denomination kinds-of-coins)) kinds-of-coins))))
 
 (defn count-change [amount] 
   (cc amount 5))

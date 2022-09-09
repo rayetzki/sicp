@@ -39,13 +39,13 @@
           (get-name [employee] (list employee))
           (get-position [employee] (second employee))
           (get-salary [employee] (nth employee 2))
-          
+
           (get-employees []
             (list (make-employee 'Hugo 'junior 60000)
                   (make-employee 'Alyssa 'senior 90000)
                   (make-employee 'Eva 'lead 100000)
                   (make-employee 'Ben 'senior 110000)))
-          
+
           (get-employee [name]
             (letfn [(find-employee [[person & others]]
                       (cond (nil? person) nil

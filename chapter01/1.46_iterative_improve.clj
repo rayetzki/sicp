@@ -3,9 +3,9 @@
 (defn iterative-improve [good? improve]
   (fn [first-guess] 
     (loop [guess first-guess] 
-      (let [next-guess (improve guess)] 
-        (if (good? next-guess) 
-          next-guess 
+      (let [next-guess (improve guess)]
+        (if (good? next-guess)
+          next-guess
           (recur next-guess))))))
 
 (defn sqrt [x]

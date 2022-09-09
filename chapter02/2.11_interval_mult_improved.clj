@@ -8,14 +8,14 @@
           d (upper-bound y)]
       (cond (cross-zero? a b)
             (cond (cross-zero? c d)
-                  (make-interval (min (* b c) (* a d)) (max (* a c) (* b d)))) 
-            :else (let [factor (if (neg-int? c) c d)] 
+                  (make-interval (min (* b c) (* a d)) (max (* a c) (* b d))))
+            :else (let [factor (if (neg-int? c) c d)]
                     (make-interval (* a factor) (* b factor))))
       (when (cross-zero? c d)
-            (let [factor (if (neg-int? a) a b)]
-              (make-interval (* factor c) (* factor d))))
-      (if (neg-int? (* a c)) 
-        (make-interval (* a d) (* b c)) 
+        (let [factor (if (neg-int? a) a b)]
+          (make-interval (* factor c) (* factor d))))
+      (if (neg-int? (* a c))
+        (make-interval (* a d) (* b c))
         (make-interval (* a c) (* b d))))))
 
 (mul-interval-imp (make-interval 2 3) (make-interval 3 4))

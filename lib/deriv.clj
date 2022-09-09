@@ -27,7 +27,7 @@
 
 (defn product? [exp] (= (first exp) '*))
 (defn multiplier [product] (nth product 1))
-(defn multiplicand [[_ __ & product]] 
+(defn multiplicand [[_ __ & product]]
   (if (empty? (rest product))
     (first product)
     (cons '* product)))
@@ -61,10 +61,9 @@
                             (make-product
                              (make-product b (make-exp b (if (number? n) (dec n) '(- n 1))))
                              (deriv b x))))]
-    (cond
-      (number? exp) 0
-      (variable? exp) (if (same-variable? exp x) 1 0)
-      (sum? exp) (derive-sum)
-      (product? exp) (derive-product)
-      (exponentiation? exp) (derive-exponent)
-      :else (throw (IllegalArgumentException. "Unknown type of expression -- DERIV" exp)))))
+    (cond (number? exp) 0
+          (variable? exp) (if (same-variable? exp x) 1 0)
+          (sum? exp) (derive-sum)
+          (product? exp) (derive-product)
+          (exponentiation? exp) (derive-exponent)
+          :else (throw (IllegalArgumentException. "Unknown type of expression -- DERIV" exp)))))

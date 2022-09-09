@@ -7,7 +7,7 @@
 
 (defn sum-iter [term a next b]
   (loop [a a result 0]
-     (if (> a b) 
+     (if (> a b)
        result 
        (recur (next a) (+ result (term a))))))
   

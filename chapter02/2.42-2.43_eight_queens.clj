@@ -3,8 +3,8 @@
 (defn safe? [positions]
   (let [new-pair (first positions)
         safe-in-row? (fn [cells]
-                       (empty? 
-                        (filter (fn [cell] (= (first new-pair) (first cell))) cells)))
+                       (empty?
+                        (filter #(= (first new-pair) (first %)) cells)))
         safe-in-diagonal? (fn [cells]
                             (let [queen (first cells)]
                               (cond
@@ -24,8 +24,7 @@
     (list empty-board)
     (filter (fn [positions] (safe? positions))
             (mapcat (fn [rest-of-queens]
-                      (map (fn [row]
-                             (adjoin-position (list row col) rest-of-queens))
+                      (map #(adjoin-position (list % col) rest-of-queens)
                            (range 1 (inc board-size))))
                     (queen-cols (dec col) board-size)))))
 

@@ -20,11 +20,10 @@
 
 (defn adjoin-set [el items]
   (loop [[first-leaf & other :as st] items result (empty items)]
-    (cond
-      (empty? st) (-> el (cons result) reverse)
-      (= el first-leaf) items
-      (< (weights el) (weights first-leaf)) (-> el (cons result) reverse (concat st))
-      :else (recur other (cons first-leaf result)))))
+    (cond (empty? st) (-> el (cons result) reverse)
+          (= el first-leaf) items
+          (< (weights el) (weights first-leaf)) (-> el (cons result) reverse (concat st))
+          :else (recur other (cons first-leaf result)))))
 
 (defn make-code-tree [left right]
   (list left

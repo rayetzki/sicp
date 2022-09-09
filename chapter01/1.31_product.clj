@@ -4,10 +4,10 @@
     (* (term a) (product-recursive term (next a) next b))))
 
 (defn product-iterative [term a next b]
-  (letfn [(iter [a result] 
-                (if (> a b) 
-                  result 
-                  (iter (next a) (* result (term a)))))]
+  (letfn [(iter [a result]
+            (if (> a b)
+              result
+              (iter (next a) (* result (term a)))))]
     (iter a 1)))
 
 (defn factorial [n] 

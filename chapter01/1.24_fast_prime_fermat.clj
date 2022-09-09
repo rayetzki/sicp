@@ -1,6 +1,6 @@
 (require '[lib.fermat :refer [fermat-test, expmod]])
-(import java.lang.System)
 (require '[chapter01.1.22_search_for_primes :refer [search-for-primes, start-prime-test, timed-prime-test]])
+(import java.lang.System)
 
 (defn fast-timed-prime-test [n]
   (start-prime-test n (System/nanoTime) fermat-test expmod))
