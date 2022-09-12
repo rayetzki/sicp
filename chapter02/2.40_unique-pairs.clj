@@ -7,9 +7,8 @@
   (prime? (+ (first pair) (last pair))))
 
 (defn unique-pairs [n]
-  (mapcat
-   (fn [i] (map #(list i %) (range 1 (dec i))))
-   (range 1 n)))
+  (mapcat (fn [i] (map #(list i %) (range 1 (dec i))))
+          (range 1 n)))
 
 (defn prime-sum-pairs [n]
   (map make-pair-sum

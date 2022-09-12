@@ -2,7 +2,7 @@
   (:require [lib.math :refer [square, halve]]))
 
 (defn expt-recur [b n]
-  (if (zero? n) 
+  (if (zero? n)
     1
     (* b (expt-recur b (dec n)))))
 
