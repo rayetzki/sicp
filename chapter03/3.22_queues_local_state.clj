@@ -1,11 +1,14 @@
+(defrecord Queue [front rear])
+
 (defn make-queue []
-  (let [front-ptr (atom '())
-        rear-ptr (atom '())
+  (let [queue (Queue. (atom '()) (atom '()))
+        front-ptr (:front queue)
+        rear-ptr (:rear queue)
         empty-queue? #(empty? @front-ptr)
         front #(if (empty-queue?)
                  (throw (Exception. "FRONT is called with an empty queue"))
                  (first @front-ptr))
-        print-queue #(loop [ptr front-ptr acc (empty list)]
+        print-queue #(loop [ptr front-ptr acc '()]
                        (if (empty? @ptr)
                          (reverse acc)
                          (recur (last @ptr) (conj acc (first @ptr)))))
@@ -30,8 +33,3 @@
             (= op 'insert!) insert-queue!
             (= op 'delete!) delete-queue!
             :else (throw (Exception. "Operation does not exist"))))))
-
-(def q (make-queue))
-((q 'insert!) 'a)
-((q 'insert!) 'b)
-((q 'delete!))
