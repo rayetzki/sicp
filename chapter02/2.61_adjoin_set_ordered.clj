@@ -14,5 +14,5 @@
 
 (defn adjoin-set [el items]
   (let [[prefix suffix] (split-with #(< % el) items)]
-    (if (= el (first suffix)) set
+    (if (= el (first suffix)) items
         (concat prefix (list el) suffix))))
