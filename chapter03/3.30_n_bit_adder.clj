@@ -1,13 +1,15 @@
-(require '[lib.digital :refer [full-adder, make-wire]])
+(require '[lib.digital :refer [full-adder, make-wire, get-signal]])
 
 (defn ripple-carry-adder [Ak Bk]
-  (when-not (= (count Ak) (count Bk)) 
-    (throw (Exception. "Signals count mismatch" (count Ak) (count Bk))))
-  (let [c-in (make-wire) sum (make-wire) c-out (make-wire)]
-    (loop [[A & rest-A] Ak [B & rest-B] Bk Sk (list @sum)]
+  (when-not (= (count Ak) (count Bk))
+    (throw (IllegalArgumentException. "Signals count mismatch" (count Ak) (count Bk))))
+  (loop [[A & rest-A] (reverse Ak)
+         [B & rest-B] (reverse Bk)
+         Carry (make-wire)
+         Sk (empty list)]
+    (let [Sum (make-wire) Carry-Out (make-wire)]
       (if (nil? A)
-        (cons c-out Sk)
+        (str "Sum is: " Sk " " "Carry: " (get-signal Carry))
         (do
-          (full-adder c-in A B sum c-out)
-          (recur (rest rest-A) (rest rest-B) (cons @sum Sk)))))))
-
+          (full-adder A B Carry Sum Carry-Out)
+          (recur rest-A rest-B Carry-Out (cons (get-signal Sum) Sk)))))))

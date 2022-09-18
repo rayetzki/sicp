@@ -1,0 +1,1 @@
+;; If LIFO queue used, signal would've been passed reversed (from Output to Input). So, first in order (last in queue) means last in list, but first by time chunk.
