@@ -7,8 +7,8 @@
   (let [memo (atom (hash-map))]
     (fn [& args]
       (let [cached (get @memo args)]
-        (if cached 
+        (if cached
           cached
-          (do 
+          (do
             (swap! memo assoc args (apply f args))
             (get @memo args)))))))

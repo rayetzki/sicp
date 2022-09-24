@@ -48,19 +48,20 @@
         (and (number? base) (number? exp)) (Math/pow base exp)
         :else (list '** base exp)))
 
-(defn deriv [exp x] 
-  (let [derive-sum (fn [] (make-sum
-                           (deriv (addend exp) x)
-                           (deriv (augend exp) x)))
-        derive-product (fn []
-                         (make-sum
-                          (make-product (multiplier exp) (deriv (multiplicand exp) x))
-                          (make-product (multiplicand exp) (deriv (multiplier exp) x))))
-        derive-exponent (fn []
-                          (let [b (base exp) n (exponent exp)]
-                            (make-product
-                             (make-product b (make-exp b (if (number? n) (dec n) '(- n 1))))
-                             (deriv b x))))]
+(defn deriv [exp x]
+  (letfn [(derive-sum []
+            (make-sum
+             (deriv (addend exp) x)
+             (deriv (augend exp) x)))
+          (derive-product []
+            (make-sum
+             (make-product (multiplier exp) (deriv (multiplicand exp) x))
+             (make-product (multiplicand exp) (deriv (multiplier exp) x))))
+          (derive-exponent []
+            (let [b (base exp) n (exponent exp)]
+              (make-product
+               (make-product b (make-exp b (if (number? n) (dec n) '(- n 1))))
+               (deriv b x))))]
     (cond (number? exp) 0
           (variable? exp) (if (same-variable? exp x) 1 0)
           (sum? exp) (derive-sum)
