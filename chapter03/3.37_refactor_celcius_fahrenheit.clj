@@ -1,4 +1,4 @@
-(require '[lib.constraints :refer [set-value!, constant, make-connector, adder, multiplier, probe, forget-value!]])
+(require '[lib.constraints :refer [set-value!, constant, make-connector, adder, multiplier, probe]])
 
 (defn c+ [x y]
   (let [z (make-connector)]
