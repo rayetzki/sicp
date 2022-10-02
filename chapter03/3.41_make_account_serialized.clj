@@ -1,4 +1,4 @@
-(def make-serializer identity)
+(require '[lib.serializer :refer [make-serializer]])
 
 (defn make-account [balance]
   (letfn [(withdraw [amount]
