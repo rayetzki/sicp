@@ -1,0 +1,10 @@
+(require '[lib.stream :refer [stream-ref, stream-map, stream-enumerate-interval, stream-filter, display-stream]])
+
+(def sum (atom 0))
+(defn accum [x] (swap! sum + x) @sum)
+(def s (stream-map accum (stream-enumerate-interval 1 20)))
+(def y (stream-filter odd? s))
+(def z (stream-filter #(= (rem % 5) 0) s))
+(stream-ref y 7)
+(display-stream z)
+(reset! sum 0)
