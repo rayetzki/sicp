@@ -25,10 +25,8 @@
 (defn stream-map [proc & argstreams]
   (if (empty-stream? (first argstreams))
     empty-stream
-    (cons-stream
-     (apply proc (map stream-value argstreams))
-     #(apply stream-map
-             (cons proc (map stream-next argstreams))))))
+    (cons-stream (apply proc (map stream-value argstreams))
+                 #(apply stream-map (cons proc (map stream-next argstreams))))))
 
 (defn stream-for-each [proc stream]
   (if (empty-stream? stream)
@@ -37,11 +35,28 @@
       (proc (stream-value stream))
       (stream-for-each proc (stream-next stream)))))
 
-(defn scale-stream [stream factor]
+(defn stream-scale [stream factor]
   (stream-map #(* % factor) stream))
 
 (defn display-stream [stream]
   (stream-for-each println stream))
 
-(defn add-streams [s1 s2]
+(defn add-streams [s1 s2] 
   (stream-map + s1 s2))
+
+(defn multiply-streams [s1 s2] 
+  (stream-map * s1 s2))
+
+(defn divise-streams [s1 s2]
+  (stream-map / s1 s2))
+
+(defn integers-from-n [n]
+  (cons-stream n #(integers-from-n (inc n))))
+
+(defn stream-merge [s1 s2]
+  (cond (empty-stream? s1) s2
+        (empty-stream? s2) s1
+        :else (let [s1-val (stream-value s1) s2-val (stream-value s2)]
+                (cond (< s1-val s2-val) (cons-stream s1-val #(stream-merge (stream-next s1) s2))
+                      (> s1-val s2-val) (cons-stream s2-val #(stream-merge s1 (stream-next s2)))
+                      :else (cons-stream s1-val #(stream-merge (stream-next s1) (stream-next s2)))))))
