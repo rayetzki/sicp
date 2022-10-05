@@ -1,10 +1,12 @@
 (ns lib.stream)
 
-(def empty-stream nil)
-(defn stream-value [stream] (first stream))
-(defn stream-next [stream] ((force (second stream))))
-(defn empty-stream? [stream] (nil? stream))
-(defn cons-stream [value next] (conj (if (vector? value) value (vector value)) (delay next)))
+(defrecord Stream [value next])
+
+(def empty-stream (Stream. nil nil))
+(defn stream-value [stream] (:value stream))
+(defn stream-next [stream] ((force (:next stream))))
+(defn empty-stream? [stream] (nil? (stream-value stream)))
+(defn cons-stream [value next] (Stream. value (delay next)))
 
 (defn stream-enumerate-interval [low high]
   (if (> low high)
@@ -60,3 +62,7 @@
                 (cond (< s1-val s2-val) (cons-stream s1-val #(stream-merge (stream-next s1) s2))
                       (> s1-val s2-val) (cons-stream s2-val #(stream-merge s1 (stream-next s2)))
                       :else (cons-stream s1-val #(stream-merge (stream-next s1) (stream-next s2)))))))
+
+(defn partial-sums [stream]
+  (cons-stream (stream-value stream)
+               #(add-streams (stream-next stream) (partial-sums stream))))
