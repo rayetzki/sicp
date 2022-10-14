@@ -43,6 +43,11 @@
 (defn display-stream [stream]
   (stream-for-each println stream))
 
+(defn stream->list [stream n]
+  (if (zero? n)
+    (empty list)
+    (cons (stream-value stream) (stream->list (stream-next stream) (dec n)))))
+
 (defn add-streams [s1 s2] 
   (stream-map + s1 s2))
 
@@ -66,3 +71,8 @@
 (defn partial-sums [stream]
   (cons-stream (stream-value stream)
                #(add-streams (stream-next stream) (partial-sums stream))))
+
+(defn stream-interleave [s1 s2]
+  (if (empty-stream? s1)
+    s2
+    (cons-stream (stream-value s1) #(stream-interleave s2 (stream-next s1)))))
