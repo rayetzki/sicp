@@ -13,7 +13,7 @@
    (segment-length (make-segment C D))
    (segment-length (make-segment A D))))
 
-(defn rec-square [A B C D] 
+(defn rec-square [A B C _] 
   (*
    (segment-length (make-segment A B))
    (segment-length (make-segment B C))))

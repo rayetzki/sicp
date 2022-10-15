@@ -6,6 +6,7 @@
 (defn improve [guess x] (average guess (/ x guess)))
 
 (defn sqrt-stream [x]
+  #_{:clj-kondo/ignore [:inline-def]}
   (def guesses
     (cons-stream 1.0 #(stream-map (fn [guess] (improve guess x)) guesses)))
   guesses)
